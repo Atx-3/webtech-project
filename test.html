@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechHaven | Build Your Dream</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Orbitron for headers, Roboto for text -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        techBlack: '#050505',
+                        techDark: '#121212',
+                        techCard: '#1a1a1a',
+                        neonCyan: '#00f3ff',
+                        neonPurple: '#bc13fe',
+                        neonGreen: '#0aff00'
+                    },
+                    fontFamily: {
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+
+        /* Neon Glow Effects */
+        .neon-text {
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5), 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+        .neon-border {
+            box-shadow: 0 0 5px rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .neon-border:hover {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+            border-color: #00f3ff;
+        }
+        
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .product-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, #1a1a1a, transparent);
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body class="font-body min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 glass-panel border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="app.renderHome()">
+                <i class="fa-solid fa-microchip text-neonCyan text-2xl"></i>
+                <h1 class="font-display text-2xl font-bold tracking-wider text-white">TECH<span class="text-neonCyan">HAVEN</span></h1>
+            </div>
+
+            <div class="hidden md:flex gap-8 text-sm font-bold tracking-widest text-gray-400">
+                <a onclick="app.renderHome()" class="hover:text-neonCyan cursor-pointer transition-colors">HOME</a>
+                <a onclick="app.renderCatalog('build-pc')" class="hover:text-neonPurple cursor-pointer transition-colors">BUILD PC</a>
+                <a onclick="app.renderCatalog('laptop')" class="hover:text-neonCyan cursor-pointer transition-colors">LAPTOPS</a>
+                <a onclick="app.renderCatalog('accessories')" class="hover:text-neonCyan cursor-pointer transition-colors">ACCESSORIES</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="app.toggleCart()" class="relative group">
+                    <i class="fa-solid fa-cart-shopping text-xl text-gray-300 group-hover:text-neonCyan transition-colors"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-neonPurple text-white text-xs font-bold px-1.5 py-0.5 rounded-full">0</span>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu (Simple) -->
+        <div class="md:hidden flex justify-around py-2 border-t border-gray-800 text-xs text-gray-400">
+            <span onclick="app.renderCatalog('build-pc')">PC Parts</span>
+            <span onclick="app.renderCatalog('laptop')">Laptops</span>
+            <span onclick="app.renderCatalog('mobile')">Phones</span>
+            <span onclick="app.renderCatalog('accessories')">Gear</span>
+        </div>
+    </nav>
+
+    <!-- Main Content Injection Point -->
+    <main id="app-root" class="flex-grow container mx-auto px-4 py-8">
+        <!-- Content renders here via JS -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-techDark border-t border-gray-800 mt-auto">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h2 class="font-display text-xl font-bold text-white mb-4">TECH<span class="text-neonCyan">HAVEN</span></h2>
+                    <p class="text-gray-500 text-sm">Building the future, one component at a time. The ultimate destination for tech enthusiasts.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white mb-4">Shop</h3>
+                    <ul class="text-gray-500 text-sm space-y-2 cursor-pointer">
+                        <li onclick="app.renderCatalog('build-pc')" class="hover:text-neonCyan">Processors & GPUs</li>
+                        <li onclick="app.renderCatalog('laptop-gaming')" class="hover:text-neonCyan">Gaming Laptops</li>
+                        <li onclick="app.renderCatalog('accessories')" class="hover:text-neonCyan">Peripherals</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white mb-4">Support</h3>
+                    <ul class="text-gray-500 text-sm space-y-2">
+                        <li class="hover:text-neonCyan">Order Status</li>
+                        <li class="hover:text-neonCyan">Warranty</li>
+                        <li class="hover:text-neonCyan">PC Builder Guide</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white mb-4">Newsletter</h3>
+                    <div class="flex">
+                        <input type="text" placeholder="Enter email" class="bg-techCard border border-gray-700 text-white px-3 py-2 text-sm w-full focus:outline-none focus:border-neonCyan">
+                        <button class="bg-neonCyan text-black px-4 py-2 font-bold text-sm hover:bg-white transition-colors">JOIN</button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-600 text-sm">
+                &copy; 2024 TechHaven India. All rights reserved. Prices in INR (₹).
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar/Modal -->
+    <div id="cart-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="app.toggleCart()"></div>
+        <div class="absolute right-0 top-0 h-full w-full md:w-[400px] bg-techDark border-l border-gray-800 shadow-2xl flex flex-col transform transition-transform duration-300 translate-x-full" id="cart-panel">
+            <div class="p-4 border-b border-gray-800 flex justify-between items-center">
+                <h2 class="font-display text-xl text-white">YOUR <span class="text-neonCyan">RIG</span></h2>
+                <button onclick="app.toggleCart()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <!-- Cart Items Render Here -->
+                <div class="text-center text-gray-500 mt-10">Your cart is empty.</div>
+            </div>
+
+            <div class="p-4 border-t border-gray-800 bg-techCard">
+                <div class="flex justify-between items-center mb-4 text-gray-300">
+                    <span>Subtotal</span>
+                    <span id="cart-total" class="font-display text-xl text-neonCyan">₹0</span>
+                </div>
+                <button onclick="app.checkout()" class="w-full bg-gradient-to-r from-neonPurple to-neonCyan text-black font-bold py-3 hover:opacity-90 transition-opacity">
+                    CHECKOUT NOW
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="fixed inset-0 z-[90] hidden flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="app.closeProductModal()"></div>
+        <div class="relative bg-techDark border border-gray-700 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg shadow-2xl flex flex-col md:flex-row animate-fadeIn" id="product-modal-content">
+            <!-- Content injected here -->
+        </div>
+    </div>
+
+    <script>
+        // --- DATA (Mock Database) ---
+        const products = [
+            // Build PC Parts
+            { id: 101, name: "Intel Core i9-14900K", category: "cpu", type: "part", price: 56999, image: "https://placehold.co/400x300/1a1a1a/00f3ff?text=Intel+i9", specs: ["24 Cores", "6.0 GHz", "LGA1700"], desc: "The ultimate processor for gaming and creativity." },
+            { id: 102, name: "AMD Ryzen 9 7950X3D", category: "cpu", type: "part", price: 62000, image: "https://placehold.co/400x300/1a1a1a/ff5733?text=Ryzen+9", specs: ["16 Cores", "5.7 GHz", "AM5"], desc: "Powered by 3D V-Cache technology for pure gaming dominance." },
+            { id: 103, name: "NVIDIA RTX 4090", category: "gpu", type: "part", price: 175000, image: "https://placehold.co/400x300/1a1a1a/76b900?text=RTX+4090", specs: ["24GB GDDR6X", "16384 CUDA", "DLSS 3"], desc: "The world's fastest GPU. Period." },
+            { id: 104, name: "Radeon RX 7900 XTX", category: "gpu", type: "part", price: 98000, image: "https://placehold.co/400x300/1a1a1a/ff0000?text=RX+7900+XTX", specs: ["24GB GDDR6", "RDNA 3", "Ray Tracing"], desc: "Ultimate 4K gaming performance at a better value." },
+            
+            // Laptops
+            { id: 201, name: "Alienware x16 R1", category: "laptop-gaming", type: "laptop", price: 284990, image: "https://placehold.co/400x300/1a1a1a/00f3ff?text=Alienware", specs: ["i9-13900HK", "RTX 4080", "32GB RAM"], desc: "Premium gaming laptop with Cryo-tech cooling." },
+            { id: 202, name: "ASUS ROG Zephyrus G14", category: "laptop-gaming", type: "laptop", price: 149990, image: "https://placehold.co/400x300/1a1a1a/ffffff?text=Zephyrus+G14", specs: ["Ryzen 9", "RTX 4060", "AniMe Matrix"], desc: "Ultra-portable gaming powerhouse." },
+            { id: 203, name: "MacBook Pro M3 Max", category: "laptop-business", type: "laptop", price: 319900, image: "https://placehold.co/400x300/1a1a1a/cccccc?text=MacBook+Pro", specs: ["M3 Max Chip", "14-inch XDR", "36GB RAM"], desc: "For serious professionals and creatives." },
+            { id: 204, name: "Dell XPS 15", category: "laptop-everyday", type: "laptop", price: 195000, image: "https://placehold.co/400x300/1a1a1a/dddddd?text=Dell+XPS", specs: ["OLED 3.5K", "i7-13700H", "RTX 4050"], desc: "The perfect balance of power and elegance." },
+
+            // Mobile
+            { id: 301, name: "Samsung Galaxy S24 Ultra", category: "mobile", type: "tech", price: 129999, image: "https://placehold.co/400x300/1a1a1a/FFFF00?text=S24+Ultra", specs: ["AI Features", "200MP Cam", "Titanium"], desc: "The smartest AI phone on the market." },
+            { id: 302, name: "iPhone 15 Pro Max", category: "mobile", type: "tech", price: 159900, image: "https://placehold.co/400x300/1a1a1a/999999?text=iPhone+15", specs: ["A17 Pro", "Titanium", "5x Zoom"], desc: "Titanium design and A17 Pro chip." },
+
+            // Accessories
+            { id: 401, name: "Logitech G Pro X Superlight", category: "mouse", type: "acc", price: 12995, image: "https://placehold.co/400x300/1a1a1a/ffffff?text=G+Pro+X", specs: ["63g Weight", "Hero 25K", "Wireless"], desc: "The choice of esports professionals." },
+            { id: 402, name: "Razer BlackWidow V4", category: "keyboard", type: "acc", price: 16999, image: "https://placehold.co/400x300/1a1a1a/00ff00?text=BlackWidow", specs: ["Green Switch", "Chroma RGB", "Macro Keys"], desc: "Iconic mechanical gaming keyboard." },
+            { id: 403, name: "Sony WH-1000XM5", category: "headphone", type: "acc", price: 26990, image: "https://placehold.co/400x300/1a1a1a/aaaaaa?text=Sony+XM5", specs: ["Noise Cancelling", "30hr Battery", "LDAC"], desc: "Industry-leading noise cancellation." },
+            { id: 404, name: "ROG Ranger Backpack", category: "bag", type: "acc", price: 7500, image: "https://placehold.co/400x300/1a1a1a/ff0000?text=ROG+Bag", specs: ["Water Repellent", "20L Capacity", "Modular"], desc: "Carry your gaming gear in style and safety." },
+        ];
+
+        // --- APP LOGIC ---
+
+        const app = {
+            cart: JSON.parse(localStorage.getItem('techHavenCart')) || [],
+            root: document.getElementById('app-root'),
+            
+            init: () => {
+                app.updateCartCount();
+                app.renderHome();
+                
+                // Initialize cart slide animation
+                const cartPanel = document.getElementById('cart-panel');
+                cartPanel.addEventListener('transitionend', () => {
+                    if (cartPanel.classList.contains('translate-x-full')) {
+                        document.getElementById('cart-modal').classList.add('hidden');
+                    }
+                });
+            },
+
+            formatCurrency: (amount) => {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    maximumFractionDigits: 0
+                }).format(amount);
+            },
+
+            // --- VIEW RENDERERS ---
+
+            renderHome: () => {
+                window.scrollTo(0,0);
+                app.root.innerHTML = `
+                    <!-- Hero Section -->
+                    <div class="relative rounded-2xl overflow-hidden mb-12 h-[500px] flex items-center bg-gray-900 border border-gray-800">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2042&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+                        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
+                        <div class="relative z-10 p-10 md:p-16 max-w-2xl fade-in">
+                            <span class="text-neonCyan font-bold tracking-widest text-sm mb-2 block">NEXT GEN HARDWARE</span>
+                            <h1 class="text-5xl md:text-7xl font-display font-bold text-white mb-6 leading-tight">BUILD YOUR <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-neonPurple">LEGACY</span></h1>
+                            <p class="text-gray-400 text-lg mb-8">Premium components, high-performance laptops, and elite peripherals for the ultimate setup.</p>
+                            <div class="flex gap-4">
+                                <button onclick="app.renderCatalog('build-pc')" class="bg-neonCyan text-black font-bold px-8 py-4 rounded hover:bg-white hover:scale-105 transition-all">START BUILDING</button>
+                                <button onclick="app.renderCatalog('all')" class="border border-white text-white font-bold px-8 py-4 rounded hover:bg-white/10 transition-all">VIEW ALL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categories Grid -->
+                    <h2 class="text-2xl font-display font-bold mb-6 text-white border-l-4 border-neonPurple pl-4">SHOP BY CATEGORY</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+                        ${app.createCategoryCard('Custom PC Parts', 'cpu', 'fa-microchip', 'from-blue-900 to-black')}
+                        ${app.createCategoryCard('Gaming Laptops', 'laptop-gaming', 'fa-laptop-code', 'from-purple-900 to-black')}
+                        ${app.createCategoryCard('Peripherals', 'accessories', 'fa-headset', 'from-green-900 to-black')}
+                        ${app.createCategoryCard('Smartphones', 'mobile', 'fa-mobile-screen', 'from-red-900 to-black')}
+                    </div>
+
+                    <!-- Featured Products -->
+                    <div class="flex justify-between items-end mb-6">
+                        <h2 class="text-2xl font-display font-bold text-white border-l-4 border-neonCyan pl-4">TRENDING NOW</h2>
+                        <button onclick="app.renderCatalog('all')" class="text-neonCyan text-sm font-bold hover:underline">VIEW ALL <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        ${products.slice(0, 4).map(p => app.createProductCard(p)).join('')}
+                    </div>
+                `;
+            },
+
+            renderCatalog: (filter) => {
+                window.scrollTo(0,0);
+                let filteredProducts = products;
+                let title = "ALL PRODUCTS";
+
+                // Filter Logic
+                if (filter !== 'all') {
+                    if (filter === 'build-pc') {
+                        filteredProducts = products.filter(p => p.category === 'cpu' || p.category === 'gpu' || p.category === 'ram');
+                        title = "PC BUILDER COMPONENTS";
+                    } else if (filter === 'laptop') {
+                        filteredProducts = products.filter(p => p.type === 'laptop');
+                        title = "LAPTOPS (GAMING & BUSINESS)";
+                    } else if (filter === 'accessories') {
+                        filteredProducts = products.filter(p => p.category === 'mouse' || p.category === 'keyboard' || p.category === 'headphone' || p.category === 'bag');
+                        title = "TECH ACCESSORIES";
+                    } else {
+                        filteredProducts = products.filter(p => p.category === filter);
+                        title = filter.toUpperCase().replace('-', ' ');
+                    }
+                }
+
+                // Sub-category filters for Catalog View
+                const subFilters = filter === 'build-pc' 
+                    ? `<div class="flex gap-2 overflow-x-auto pb-2 mb-6 text-sm">
+                        <button onclick="app.renderCatalog('cpu')" class="px-4 py-2 bg-techCard border border-gray-700 rounded hover:border-neonCyan">CPUs</button>
+                        <button onclick="app.renderCatalog('gpu')" class="px-4 py-2 bg-techCard border border-gray-700 rounded hover:border-neonCyan">GPUs</button>
+                       </div>`
+                    : '';
+
+                app.root.innerHTML = `
+                    <div class="fade-in">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
+                            <div>
+                                <h1 class="text-3xl font-display font-bold text-white mb-2">${title}</h1>
+                                <p class="text-gray-500 text-sm">Showing ${filteredProducts.length} results</p>
+                            </div>
+                            <!-- Mock Sort -->
+                            <select class="bg-techCard text-gray-300 border border-gray-700 p-2 rounded focus:border-neonCyan outline-none">
+                                <option>Sort by: Recommended</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                            </select>
+                        </div>
+
+                        ${subFilters}
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            ${filteredProducts.length > 0 
+                                ? filteredProducts.map(p => app.createProductCard(p)).join('') 
+                                : `<div class="col-span-4 text-center py-20 text-gray-500 text-xl">No products found in this category.</div>`}
+                        </div>
+                    </div>
+                `;
+            },
+
+            // --- COMPONENT GENERATORS ---
+
+            createCategoryCard: (title, filter, icon, gradient) => {
+                return `
+                    <div onclick="app.renderCatalog('${filter}')" class="group relative h-40 rounded-xl overflow-hidden cursor-pointer border border-gray-800 hover:border-neonCyan transition-all">
+                        <div class="absolute inset-0 bg-gradient-to-br ${gradient} opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center p-4">
+                            <i class="fa-solid ${icon} text-4xl text-gray-300 mb-2 group-hover:text-white group-hover:scale-110 transition-transform"></i>
+                            <h3 class="font-display font-bold text-white tracking-wide">${title}</h3>
+                        </div>
+                    </div>
+                `;
+            },
+
+            createProductCard: (product) => {
+                return `
+                    <div class="group bg-techCard border border-gray-800 rounded-lg overflow-hidden hover:border-gray-600 transition-all flex flex-col neon-border">
+                        <div class="product-image-container h-48 bg-gray-800 relative cursor-pointer" onclick="app.showProductModal(${product.id})">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                            <div class="absolute bottom-2 left-2 bg-black/70 backdrop-blur px-2 py-1 rounded text-xs text-neonCyan font-bold border border-neonCyan/30">
+                                ${product.category.toUpperCase()}
+                            </div>
+                        </div>
+                        <div class="p-4 flex-grow flex flex-col">
+                            <h3 class="text-white font-bold text-lg mb-1 line-clamp-1 cursor-pointer hover:text-neonCyan" onclick="app.showProductModal(${product.id})">${product.name}</h3>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                ${product.specs.slice(0,2).map(s => `<span class="text-[10px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">${s}</span>`).join('')}
+                            </div>
+                            <div class="mt-auto flex justify-between items-center">
+                                <span class="text-xl font-display font-bold text-white">${app.formatCurrency(product.price)}</span>
+                                <button onclick="app.addToCart(${product.id})" class="bg-gray-800 hover:bg-neonCyan hover:text-black text-white w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // --- CART & MODALS ---
+
+            showProductModal: (id) => {
+                const product = products.find(p => p.id === id);
+                if (!product) return;
+
+                const modalContent = document.getElementById('product-modal-content');
+                modalContent.innerHTML = `
+                    <div class="w-full md:w-1/2 bg-gray-800 h-64 md:h-auto relative overflow-hidden">
+                        <img src="${product.image}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-8 md:w-1/2 flex flex-col">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-neonPurple text-xs font-bold tracking-widest border border-neonPurple px-2 py-1 rounded">${product.category.toUpperCase()}</span>
+                            <button onclick="app.closeProductModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
+                        </div>
+                        <h2 class="text-3xl font-display font-bold text-white mb-2">${product.name}</h2>
+                        <h3 class="text-2xl text-neonCyan font-bold mb-6">${app.formatCurrency(product.price)}</h3>
+                        
+                        <p class="text-gray-400 mb-6 leading-relaxed">${product.desc}</p>
+                        
+                        <div class="mb-8">
+                            <h4 class="text-white font-bold mb-2 text-sm uppercase text-gray-500">Specifications</h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                ${product.specs.map(s => `<div class="bg-gray-800 p-2 rounded text-sm text-gray-300 border border-gray-700"><i class="fa-solid fa-bolt text-neonCyan mr-2"></i>${s}</div>`).join('')}
+                            </div>
+                        </div>
+
+                        <button onclick="app.addToCart(${product.id}); app.closeProductModal()" class="mt-auto w-full bg-neonCyan text-black font-bold py-4 rounded hover:bg-white transition-colors uppercase tracking-wider">
+                            Add to Build / Cart
+                        </button>
+                    </div>
+                `;
+                document.getElementById('product-modal').classList.remove('hidden');
+            },
+
+            closeProductModal: () => {
+                document.getElementById('product-modal').classList.add('hidden');
+            },
+
+            toggleCart: () => {
+                const modal = document.getElementById('cart-modal');
+                const panel = document.getElementById('cart-panel');
+                
+                if (modal.classList.contains('hidden')) {
+                    modal.classList.remove('hidden');
+                    // Slight delay to allow display:block to apply before transform
+                    setTimeout(() => {
+                        panel.classList.remove('translate-x-full');
+                    }, 10);
+                    app.renderCartItems();
+                } else {
+                    panel.classList.add('translate-x-full');
+                    // Listener in Init handles the hidden class
+                }
+            },
+
+            addToCart: (id) => {
+                const product = products.find(p => p.id === id);
+                // Check if already in cart
+                const existing = app.cart.find(item => item.id === id);
+                if (existing) {
+                    existing.qty++;
+                } else {
+                    app.cart.push({ ...product, qty: 1 });
+                }
+                app.saveCart();
+                
+                // Visual Feedback
+                const btn = document.querySelector(`button[onclick="app.addToCart(${id})"]`);
+                if(btn) {
+                    const originalHTML = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check text-green-500"></i>';
+                    setTimeout(() => btn.innerHTML = originalHTML, 1000);
+                }
+                
+                // Open cart automatically on add? Optional. Let's just update counter.
+                app.updateCartCount();
+            },
+
+            removeFromCart: (id) => {
+                app.cart = app.cart.filter(item => item.id !== id);
+                app.saveCart();
+                app.renderCartItems();
+            },
+
+            updateQty: (id, change) => {
+                const item = app.cart.find(i => i.id === id);
+                if (item) {
+                    item.qty += change;
+                    if (item.qty <= 0) {
+                        app.removeFromCart(id);
+                    } else {
+                        app.saveCart();
+                        app.renderCartItems();
+                    }
+                }
+            },
+
+            saveCart: () => {
+                localStorage.setItem('techHavenCart', JSON.stringify(app.cart));
+                app.updateCartCount();
+            },
+
+            updateCartCount: () => {
+                const count = app.cart.reduce((acc, item) => acc + item.qty, 0);
+                const badge = document.getElementById('cart-count');
+                badge.innerText = count;
+                if (count > 0) badge.classList.add('animate-bounce');
+                setTimeout(() => badge.classList.remove('animate-bounce'), 1000);
+            },
+
+            renderCartItems: () => {
+                const container = document.getElementById('cart-items');
+                const totalEl = document.getElementById('cart-total');
+                
+                if (app.cart.length === 0) {
+                    container.innerHTML = `<div class="flex flex-col items-center justify-center h-64 text-gray-500">
+                        <i class="fa-solid fa-cart-arrow-down text-4xl mb-4 opacity-50"></i>
+                        <p>Your rig is waiting for parts.</p>
+                    </div>`;
+                    totalEl.innerText = app.formatCurrency(0);
+                    return;
+                }
+
+                let total = 0;
+                container.innerHTML = app.cart.map(item => {
+                    total += item.price * item.qty;
+                    return `
+                        <div class="flex gap-4 bg-gray-800 p-3 rounded border border-gray-700 animate-fadeIn">
+                            <img src="${item.image}" class="w-16 h-16 object-cover rounded bg-black">
+                            <div class="flex-grow">
+                                <h4 class="text-white text-sm font-bold line-clamp-1">${item.name}</h4>
+                                <p class="text-neonCyan text-xs mb-2">${app.formatCurrency(item.price)}</p>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="app.updateQty(${item.id}, -1)" class="w-6 h-6 bg-black rounded text-gray-400 hover:text-white">-</button>
+                                    <span class="text-sm text-white">${item.qty}</span>
+                                    <button onclick="app.updateQty(${item.id}, 1)" class="w-6 h-6 bg-black rounded text-gray-400 hover:text-white">+</button>
+                                </div>
+                            </div>
+                            <button onclick="app.removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 self-start"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                }).join('');
+                
+                totalEl.innerText = app.formatCurrency(total);
+            },
+            
+            checkout: () => {
+                if(app.cart.length === 0) return;
+                alert(`Checkout Simulated! \nTotal Bill: ${document.getElementById('cart-total').innerText}\n\nThanks for building with TechHaven!`);
+                app.cart = [];
+                app.saveCart();
+                app.toggleCart();
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', app.init);
+    </script>
+</body>
+</html>
